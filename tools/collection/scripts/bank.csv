@@ -1,0 +1,7 @@
+id,domain,english,suggested_glosses,notes
+B001,bank,I want to open an account.,IX-1 WANT ACCOUNT OPEN,
+B002,bank,I want to withdraw five thousand shillings.,IX-1 WANT WITHDRAW MONEY NUM:5000,critical amount
+B003,bank,My card is blocked.,POSS-1 CARD BLOCKED,
+B004,bank,Where do I queue?,QUEUE WHERE,wh-question
+B005,bank,I forgot my PIN.,IX-1 FORGET FS:PIN,
+B006,bank,How much is the fee?,FEE HOW-MUCH,wh-question

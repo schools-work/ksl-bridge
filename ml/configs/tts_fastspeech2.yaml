@@ -1,0 +1,6 @@
+seed: 42
+train_jsonl: data/tts/voice_a_train.jsonl           # {text, lang, mel_npy, durations, pitch, energy}
+epochs: 200
+lr: 0.0005
+out: artifacts/tts/fastspeech2_voice_a.pt
+model: {d: 256, layers: 4, heads: 2}

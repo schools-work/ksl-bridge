@@ -1,0 +1,9 @@
+experiment: asr-conformer-ctc-v1
+seed: 42
+spm_model: artifacts/bpe/en_sw_asr_1k.model
+train_jsonl: data/speech/train.jsonl                # {audio, text, lang, speaker}
+val_jsonl: data/speech/val_kenyan.jsonl
+batch_size: 32
+epochs: 80
+lr: 0.0005
+model: {d: 256, layers: 12, heads: 4}

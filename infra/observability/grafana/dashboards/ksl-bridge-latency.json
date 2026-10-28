@@ -1,0 +1,16 @@
+{
+  "title": "KSL Bridge: latency & quality",
+  "schemaVersion": 39,
+  "panels": [
+    {"type": "timeseries", "title": "p95 end-to-end latency by path", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+     "targets": [{"expr": "histogram_quantile(0.95, sum(rate(ksl_e2e_latency_seconds_bucket[5m])) by (le, path))"}]},
+    {"type": "timeseries", "title": "p95 stage latency", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+     "targets": [{"expr": "histogram_quantile(0.95, sum(rate(ksl_stage_latency_seconds_bucket[5m])) by (le, stage))"}]},
+    {"type": "timeseries", "title": "Clarifications per venue type", "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+     "targets": [{"expr": "sum(rate(ksl_clarifications_total[15m])) by (venue_type)"}]},
+    {"type": "timeseries", "title": "Feedback (confirm / correct / reject)", "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+     "targets": [{"expr": "sum(rate(ksl_feedback_total[1h])) by (kind)"}]},
+    {"type": "stat", "title": "Open WebSocket connections", "gridPos": {"x": 0, "y": 16, "w": 6, "h": 4},
+     "targets": [{"expr": "sum(ksl_ws_connections)"}]}
+  ]
+}

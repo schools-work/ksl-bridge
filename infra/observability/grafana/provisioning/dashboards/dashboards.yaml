@@ -1,0 +1,3 @@
+apiVersion: 1
+providers:
+  - {name: ksl, folder: KSL Bridge, type: file, options: {path: /var/lib/grafana/dashboards}}

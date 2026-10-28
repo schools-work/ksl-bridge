@@ -1,0 +1,22 @@
+groups:
+  - name: ksl-bridge
+    rules:
+      - alert: SignToTextLatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(ksl_e2e_latency_seconds_bucket{path="sign->text"}[5m])) by (le)) > 1.5
+        for: 10m
+        labels: {severity: warning}
+        annotations: {summary: "p95 sign→text latency above 1.5 s"}
+      - alert: ClarificationRateSpike
+        expr: sum(rate(ksl_clarifications_total[30m])) / clamp_min(sum(rate(ksl_ws_messages_total{type="utterance.final"}[30m])), 1) > 0.4
+        for: 30m
+        labels: {severity: warning}
+        annotations: {summary: "More than 40% of utterances need clarification: possible drift or model regression"}
+      - alert: PartialsDropped
+        expr: rate(ksl_dropped_partials_total[5m]) > 5
+        for: 10m
+        labels: {severity: info}
+        annotations: {summary: "Backpressure is dropping partial captions"}
+      - alert: RefreshTokenReuse
+        expr: increase(ksl_auth_events_total{event="refresh_reuse"}[10m]) > 0
+        labels: {severity: critical}
+        annotations: {summary: "Refresh-token reuse detected (possible token theft)"}

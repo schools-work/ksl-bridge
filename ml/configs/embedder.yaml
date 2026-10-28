@@ -1,0 +1,8 @@
+seed: 42
+spm_model: artifacts/bpe/en_sw_8k.model
+pairs_jsonl: data/rag/qa_pairs_v1.jsonl             # {query, positive}
+batch_size: 64
+epochs: 20
+lr: 0.0003
+out: artifacts/embedder/sentence_encoder_v1.pt
+model: {d: 384, layers: 6, heads: 6}

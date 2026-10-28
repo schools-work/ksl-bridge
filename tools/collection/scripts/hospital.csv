@@ -1,0 +1,13 @@
+id,domain,english,suggested_glosses,notes
+H001,hospital,I have a headache.,IX-1 HEAD PAIN,critical
+H002,hospital,Where is the pharmacy?,PHARMACY WHERE,wh-question
+H003,hospital,I have an appointment at ten.,IX-1 APPOINTMENT TIME NUM:10,
+H004,hospital,My child has a fever.,POSS-1 CHILD FEVER,critical
+H005,hospital,I am allergic to penicillin.,IX-1 ALLERGY FS:PENICILLIN,critical
+H006,hospital,The pain started yesterday.,YESTERDAY PAIN START,time first
+H007,hospital,I need a sign language interpreter.,IX-1 NEED INTERPRETER,
+H008,hospital,How long will I wait?,IX-1 WAIT HOW-LONG,wh-question
+H009,hospital,I am pregnant.,IX-1 PREGNANT,critical
+H010,hospital,This is an emergency.,EMERGENCY,critical
+H011,hospital,I take medicine for diabetes.,IX-1 TAKE MEDICINE DIABETES,critical
+H012,hospital,Can I see a doctor today?,TODAY IX-1 SEE DOCTOR CAN,yes-no question

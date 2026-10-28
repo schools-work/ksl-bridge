@@ -1,0 +1,7 @@
+order: 4
+discount: 0.75
+out_dir: artifacts/lm
+corpora:
+  general: {train: data/text/gloss_general_train.txt, heldout: data/text/gloss_general_val.txt}
+  restaurant: {train: data/text/gloss_restaurant_train.txt}
+  hospital: {train: data/text/gloss_hospital_train.txt}

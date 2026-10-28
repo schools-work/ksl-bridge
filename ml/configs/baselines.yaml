@@ -1,0 +1,5 @@
+experiment: baselines-v1
+seed: 42
+manifest: data/manifests/ksl_islr_v1.jsonl
+knn: {k: 3, window: 20, pca_dim: 64}
+rf: {n_estimators: 500}

@@ -1,0 +1,16 @@
+# TLS termination + WebSocket upgrade for the gateway.
+{$KSL_DOMAIN:api.localhost} {
+	encode zstd gzip
+	@ws path /ws/*
+	reverse_proxy @ws gateway:8000 {
+		flush_interval -1
+		transport http {
+			read_timeout 120s
+		}
+	}
+	reverse_proxy gateway:8000
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+}

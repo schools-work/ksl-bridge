@@ -1,0 +1,7 @@
+experiment: fingerspell-ctc-v1
+seed: 42
+manifest: data/manifests/ksl_fingerspell_v1.jsonl
+batch_size: 64
+epochs: 80
+lr: 0.001
+model: {d: 128, layers: 4, heads: 4}

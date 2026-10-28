@@ -1,0 +1,15 @@
+experiment: cslr-conformer-ctc-v1
+hypothesis: "Streaming Conformer-CTC with dynamic chunks reaches usable WER on continuous KSL"
+seed: 42
+manifest: data/manifests/ksl_cslr_v1.jsonl          # synthetic rows allowed in train only
+init_from_mpm: artifacts/checkpoints/mpm-pretrain-v1_best.pt
+batch_size: 32
+max_len: 600
+epochs: 120
+lr: 0.0005
+inter_ctc_layer: 4
+inter_ctc_weight: 0.3
+dynamic_chunks: [4, 8, 16, 0]      # 0 = full context
+left_chunks: 4
+critical_glosses: [PAIN, ALLERGY, EMERGENCY]
+model: {d: 256, layers: 8, heads: 4}

@@ -1,0 +1,12 @@
+experiment: islr-transformer-v1
+hypothesis: "Conformer + ArcMargin beats k-NN+DTW and RF on signer-independent ISLR"
+seed: 42
+manifest: data/manifests/ksl_islr_v1.jsonl
+init_from_mpm: artifacts/checkpoints/mpm-pretrain-v1_best.pt
+batch_size: 128
+max_len: 128
+epochs: 100
+lr: 0.001
+label_smoothing: 0.1
+no_mirror_glosses: []            # filled from lexicon.glosses.is_directional
+model: {d: 256, layers: 8, heads: 4}

@@ -1,0 +1,36 @@
+"""Ports (abstract interfaces) the identity use cases depend on."""
+
+from __future__ import annotations
+
+from typing import Protocol
+from uuid import UUID
+
+from .tokens import RotationResult
+from .user import User
+
+
+class UserRepo(Protocol):
+    async def create(self, user: User, password_hash: str | None) -> None: ...
+    async def get(self, user_id: UUID) -> User | None: ...
+    async def find_login(
+        self, email: str | None, phone: str | None
+    ) -> tuple[UUID, str | None, str, list[str]] | None: ...
+    async def add_role(self, user_id: UUID, role: str) -> None: ...
+    async def touch_login(self, user_id: UUID) -> None: ...
+
+
+class TokenRepo(Protocol):
+    async def insert_refresh(
+        self, user_id: UUID, family_id: UUID, token_hash: bytes, device_label: str | None, ttl_days: int
+    ) -> None: ...
+    async def rotate(self, old_hash: bytes, new_hash: bytes, ttl_days: int) -> tuple[RotationResult, UUID | None]: ...
+    async def revoke_family_of(self, token_hash: bytes, reason: str) -> None: ...
+
+
+class OtpSender(Protocol):
+    async def send(self, target: str, code: str, purpose: str) -> None: ...
+
+
+class PasswordHasher(Protocol):
+    def hash(self, password: str) -> str: ...
+    def verify(self, hash_: str, password: str) -> tuple[bool, str | None]: ...

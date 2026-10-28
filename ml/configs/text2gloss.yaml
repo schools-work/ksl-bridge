@@ -1,0 +1,9 @@
+experiment: t2g-transformer-v1
+seed: 42
+train_files: [data/parallel/annotated_train.tsv, data/parallel/templates.tsv]
+val_file: data/parallel/annotated_val.tsv
+spm_model: artifacts/bpe/en_sw_8k.model
+batch_size: 64
+epochs: 60
+lr: 0.0005
+model: {d: 256, heads: 4, enc_layers: 4, dec_layers: 4}

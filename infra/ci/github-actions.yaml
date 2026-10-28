@@ -1,0 +1,51 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+jobs:
+  lint-type-boundaries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev
+      - run: uv run ruff check .
+      - run: uv run mypy ksl_core
+      - run: uv run lint-imports
+      - run: uv run python contracts/codegen/gen_python.py --check
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev
+      - run: uv run pytest tests/unit tests/contract tests/golden -q -m "not ml"
+  schema-and-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env: {POSTGRES_PASSWORD: postgres, POSTGRES_DB: ksl_test}
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      KSL_TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/ksl_test
+      KSL_TEST_REDIS_URL: redis://localhost:6379/15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev
+      - run: psql postgresql://postgres:postgres@localhost:5432/ksl_test -v ON_ERROR_STOP=1 -f db/ksl_bridge_v1.sql
+      - run: psql postgresql://postgres:postgres@localhost:5432/ksl_test -v ON_ERROR_STOP=1 -f db/checks/schema_invariants.sql
+      - run: uv run pytest tests/integration tests/security tests/chaos -m integration -q
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev
+      - run: uv run pip-audit || true
+      - run: uv run bandit -q -r app ksl_core workers -x tests

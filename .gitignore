@@ -1,0 +1,35 @@
+# secrets
+.env
+!.env.example
+!.env.test
+*.pem
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+# data & models (never in git)
+data/*
+!data/README.md
+!data/.gitkeep
+artifacts/*
+!artifacts/README.md
+!artifacts/.gitkeep
+*.pt
+*.ckpt
+*.onnx
+*.tflite
+*.engine
+mlruns/
+emissions.csv
+# editors / OS
+.idea/
+.vscode/
+.DS_Store
+.hypothesis/
+.import_linter_cache/

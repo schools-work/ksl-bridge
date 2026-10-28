@@ -1,0 +1,32 @@
+{
+  "$comment": "SSOT for the landmark layout shared by the Kotlin app and the Python backend. Bump spec_version on ANY change.",
+  "spec_version": 1,
+  "source": "MediaPipe Holistic (local, on-device)",
+  "coordinate_system": {
+    "x": "image-normalised [0,1], origin left",
+    "y": "image-normalised [0,1], origin top (y grows downward)",
+    "z": "relative depth as reported by MediaPipe",
+    "mirroring": "front-camera frames are sent UNMIRRORED"
+  },
+  "groups": [
+    {"name": "left_hand",  "count": 21, "offset": 0,  "mediapipe": "left_hand_landmarks",  "indices": "all"},
+    {"name": "right_hand", "count": 21, "offset": 21, "mediapipe": "right_hand_landmarks", "indices": "all"},
+    {"name": "pose",       "count": 25, "offset": 42, "mediapipe": "pose_landmarks",       "indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]},
+    {"name": "face",       "count": 40, "offset": 67, "mediapipe": "face_landmarks",
+     "indices": [61,146,91,181,84,17,314,405,321,375,291,78,95,88,178,87,14,317,402,318,324,70,63,105,66,107,336,296,334,293,300,33,133,362,263,1,4,168,152,10],
+     "named_ranges": {"outer_lips": [0,11], "inner_lips": [11,21], "left_brow": [21,26], "right_brow": [26,31], "eye_corners": [31,35], "nose_chin_forehead": [35,40]}}
+  ],
+  "n_points": 107,
+  "pose_named": {"nose": 0, "left_shoulder": 11, "right_shoulder": 12, "left_elbow": 13, "right_elbow": 14, "left_wrist": 15, "right_wrist": 16, "left_hip": 23, "right_hip": 24},
+  "hand_named": {"wrist": 0, "thumb_tip": 4, "index_mcp": 5, "index_tip": 8, "middle_mcp": 9, "middle_tip": 12, "ring_tip": 16, "pinky_tip": 20},
+  "binary": {
+    "magic": "KSLB",
+    "endianness": "little",
+    "header_struct": "<4sBBHIQf",
+    "header_fields": ["magic", "spec_version", "flags", "n_frames", "seq_start", "t0_ms", "fps"],
+    "coord_dtype": "float16",
+    "mask": "packed bits, MSB-first, n_frames*n_points, padded to byte",
+    "frames_per_message": 4
+  },
+  "features": {"dim": 892, "description": "positions 321 + velocities 321 + hand-local 126 + bone directions 120 + distances 4"}
+}

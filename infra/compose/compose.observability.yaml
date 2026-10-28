@@ -1,0 +1,17 @@
+name: ksl-bridge-observability
+services:
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes: ["../observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro", "../observability/alerts.yml:/etc/prometheus/alerts.yml:ro"]
+    ports: ["9090:9090"]
+  grafana:
+    image: grafana/grafana:11.2.2
+    volumes: ["../observability/grafana/provisioning:/etc/grafana/provisioning:ro", "../observability/grafana/dashboards:/var/lib/grafana/dashboards:ro"]
+    ports: ["3001:3000"]
+  loki:
+    image: grafana/loki:3.2.0
+    ports: ["3100:3100"]
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    volumes: ["../observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro"]
+    ports: ["4317:4317"]

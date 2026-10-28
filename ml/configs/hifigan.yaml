@@ -1,0 +1,6 @@
+seed: 42
+train_jsonl: data/tts/voice_a_vocoder.jsonl         # {mel_npy, wav}
+epochs: 300
+lr: 0.0002
+out: artifacts/tts/hifigan_voice_a.pt
+model: {ch: 128}

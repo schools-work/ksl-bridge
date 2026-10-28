@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "codes": [
+    {"code": 4001, "name": "AUTH_REQUIRED",        "message": "Authentication required or token invalid", "client_action": "refresh token, reconnect"},
+    {"code": 4003, "name": "NOT_A_MEMBER",         "message": "Not a member of this room",                "client_action": "join via REST first"},
+    {"code": 4008, "name": "PROTOCOL_VIOLATION",   "message": "Invalid message or frame",                 "client_action": "bug: log and reconnect"},
+    {"code": 4009, "name": "BACKPRESSURE",         "message": "Too many in-flight frames",                "client_action": "reduce send rate (15 fps)"},
+    {"code": 4029, "name": "RATE_LIMITED",         "message": "Rate limited",                             "client_action": "wait retry_after"},
+    {"code": 4404, "name": "ROOM_CLOSED",          "message": "Room closed or expired",                   "client_action": "leave room"},
+    {"code": 4500, "name": "PIPELINE_UNAVAILABLE", "message": "Translation temporarily unavailable",      "client_action": "keep text chat working"}
+  ]
+}

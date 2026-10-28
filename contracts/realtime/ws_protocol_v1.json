@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ksl-bridge.local/contracts/realtime/ws_protocol_v1.json",
+  "title": "KSL Bridge WebSocket protocol v1",
+  "description": "Every text frame is an Envelope. Message-specific fields live in `data`. Binary frames are described in binary_frames_v1.md.",
+  "$defs": {
+    "Envelope": {
+      "type": "object",
+      "required": ["v", "type", "seq", "ts"],
+      "properties": {
+        "v": {"const": 1},
+        "type": {"type": "string"},
+        "id": {"type": ["string", "null"]},
+        "seq": {"type": "integer", "minimum": 0},
+        "ts": {"type": "integer", "description": "unix epoch ms"},
+        "room": {"type": ["string", "null"]},
+        "ack": {"type": ["integer", "null"]},
+        "data": {"type": "object"}
+      }
+    }
+  },
+  "messages": {
+    "hello":             {"direction": "c2s", "required": ["token", "client"], "properties": {"token": {"type": "string"}, "client": {"type": "object"}, "resume": {"type": ["object", "null"]}}},
+    "welcome":           {"direction": "s2c", "required": ["session_id", "heartbeat_s"], "properties": {"session_id": {"type": "string"}, "heartbeat_s": {"type": "integer"}, "server_time": {"type": "integer"}, "limits": {"type": "object"}}},
+    "room.join":         {"direction": "c2s", "required": ["room_id", "role"], "properties": {"room_id": {"type": "string"}, "role": {"enum": ["signer", "speaker", "device", "observer"]}}},
+    "room.state":        {"direction": "s2c", "required": ["members"], "properties": {"members": {"type": "array"}}},
+    "sign.start":        {"direction": "c2s", "required": [], "properties": {"fps": {"type": "number"}, "dominant_hand": {"enum": ["left", "right"]}}},
+    "sign.stop":         {"direction": "c2s", "required": [], "properties": {}},
+    "speech.start":      {"direction": "c2s", "required": ["sample_rate"], "properties": {"sample_rate": {"const": 16000}, "lang_hint": {"enum": ["en", "sw"]}}},
+    "speech.stop":       {"direction": "c2s", "required": [], "properties": {}},
+    "text.send":         {"direction": "c2s", "required": ["text"], "properties": {"text": {"type": "string", "minLength": 1, "maxLength": 2000}, "lang": {"enum": ["en", "sw"]}}},
+    "utterance.partial": {"direction": "s2c", "required": ["utterance"], "properties": {"utterance": {"$ref": "../ir/utterance_ir_v1.json"}}},
+    "utterance.final":   {"direction": "s2c", "required": ["utterance"], "properties": {"utterance": {"$ref": "../ir/utterance_ir_v1.json"}}},
+    "clarify.request":   {"direction": "s2c", "required": ["utterance_id", "clarification"], "properties": {"utterance_id": {"type": "string"}, "clarification": {"type": "object"}}},
+    "clarify.answer":    {"direction": "c2s", "required": ["utterance_id"], "properties": {"utterance_id": {"type": "string"}, "choice": {"type": ["string", "null"]}, "retry": {"type": "boolean"}}},
+    "sign.render":       {"direction": "s2c", "required": ["utterance_id", "glosses", "n_frames", "fps"], "properties": {"utterance_id": {"type": "string"}, "glosses": {"type": "array", "items": {"type": "string"}}, "captions": {"type": "string"}, "n_frames": {"type": "integer"}, "fps": {"type": "number"}}},
+    "speech.audio":      {"direction": "s2c", "required": ["utterance_id", "format", "sr"], "properties": {"utterance_id": {"type": "string"}, "format": {"const": "pcm16"}, "sr": {"type": "integer"}}},
+    "feedback":          {"direction": "c2s", "required": ["utterance_id", "kind"], "properties": {"utterance_id": {"type": "string"}, "kind": {"enum": ["confirm", "correct", "reject", "clarify_choice"]}, "corrected_glosses": {"type": ["array", "null"]}, "corrected_text": {"type": ["string", "null"]}}},
+    "typing":            {"direction": "both", "required": ["active"], "properties": {"member_id": {"type": "string"}, "active": {"type": "boolean"}}},
+    "signing":           {"direction": "s2c", "required": ["member_id", "active"], "properties": {"member_id": {"type": "string"}, "active": {"type": "boolean"}}},
+    "ping":              {"direction": "both", "required": ["t"], "properties": {"t": {"type": "integer"}}},
+    "pong":              {"direction": "both", "required": ["t"], "properties": {"t": {"type": "integer"}}},
+    "error":             {"direction": "s2c", "required": ["code"], "properties": {"code": {"type": "integer"}, "message": {"type": "string"}, "retry_after": {"type": ["number", "null"]}}},
+    "auth.refresh":      {"direction": "c2s", "required": ["token"], "properties": {"token": {"type": "string"}}},
+    "agent.action":      {"direction": "s2c", "required": ["action"], "properties": {"action": {"type": "string"}, "params": {"type": "object"}}},
+    "device.event":      {"direction": "c2s", "required": ["event"], "properties": {"event": {"type": "string"}, "params": {"type": "object"}}},
+    "device.capabilities": {"direction": "c2s", "required": [], "properties": {"screen": {"type": "boolean"}, "speaker": {"type": "boolean"}, "camera": {"type": "boolean"}, "motion": {"type": "boolean"}}}
+  },
+  "binary_kinds": {"landmarks": 1, "audio": 2, "poses": 3, "tts": 4}
+}

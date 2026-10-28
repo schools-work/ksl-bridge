@@ -1,0 +1,146 @@
+[project]
+name = "ksl-bridge"
+version = "0.1.0"
+description = "Two-way Kenyan Sign Language ⇄ speech/text communication bridge: Python AI backend"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "UNLICENSED" }
+authors = [{ name = "KSL Bridge group, Strathmore University SCES" }]
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.4",
+  "sqlalchemy[asyncio]>=2.0.30",
+  "asyncpg>=0.29",
+  "psycopg[binary]>=3.2",
+  "alembic>=1.13",
+  "redis>=5.0",
+  "argon2-cffi>=23.1",
+  "pyjwt[crypto]>=2.9",
+  "pyotp>=2.9",
+  "boto3>=1.34",
+  "msgpack>=1.0",
+  "numpy>=1.26",
+  "structlog>=24.1",
+  "prometheus-client>=0.20",
+  "opentelemetry-api>=1.25",
+  "opentelemetry-sdk>=1.25",
+  "pyyaml>=6.0",
+  "scikit-learn>=1.5",
+]
+
+[project.optional-dependencies]
+ml = [
+  "torch>=2.4",
+  "torchaudio>=2.4",
+  "mediapipe>=0.10.14",
+  "onnx>=1.16",
+  "onnxruntime>=1.18",
+  "sentencepiece>=0.2",
+  "sacrebleu>=2.4",
+  "webdataset>=0.2.86",
+  "mlflow-skinny>=2.14",
+  "codecarbon>=2.5",
+  "librosa>=0.10",
+  "soundfile>=0.12",
+  "webrtcvad>=2.0.10",
+]
+dev = [
+  "pytest>=8.2",
+  "pytest-asyncio>=0.23",
+  "hypothesis>=6.100",
+  "httpx>=0.27",
+  "websockets>=12",
+  "import-linter>=2.0",
+  "mypy>=1.10",
+  "ruff>=0.5",
+  "locust>=2.29",
+  "testcontainers[postgres,redis]>=4.7",
+  "pip-audit>=2.7",
+  "bandit>=1.7",
+]
+
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ksl_core", "app", "workers", "ml", "tools"]
+
+# ---------------------------------------------------------------- tooling
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["ksl_core/_generated", "*.md"]   # generated code; prose docs are not reformatted
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
+ignore = [
+  "S101", "E501", "RUF001", "RUF002", "RUF003",
+  "B008",    # FastAPI Depends()/Query() defaults are idiomatic
+  "UP042", "UP047", "RUF005", "RUF007", "RUF046", "RUF059",   # style-only
+  "E741",    # `l` for lengths in tensor code
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B"]
+"ml/**" = ["S301"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+exclude = ["ml/kernels/", "tests/load/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+  "integration: needs Postgres + Redis (make up)",
+  "ml: needs torch",
+  "gpu: needs CUDA",
+  "slow: long-running",
+]
+addopts = "-ra --strict-markers"
+
+# ---------------------------------------------------------------- import boundaries (PROJECT_STRUCTURE §1.1)
+[tool.importlinter]
+root_packages = ["ksl_core", "app", "workers", "ml", "tools"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "ksl_core is dependency-light and imports no project package"
+type = "forbidden"
+source_modules = ["ksl_core"]
+forbidden_modules = ["app", "workers", "ml", "tools"]
+
+[[tool.importlinter.contracts]]
+name = "app never imports ml or workers"
+type = "forbidden"
+source_modules = ["app"]
+forbidden_modules = ["ml", "workers"]
+
+[[tool.importlinter.contracts]]
+name = "ml never imports app or workers"
+type = "forbidden"
+source_modules = ["ml"]
+forbidden_modules = ["app", "workers"]
+
+[[tool.importlinter.contracts]]
+name = "workers never import app"
+type = "forbidden"
+source_modules = ["workers"]
+forbidden_modules = ["app"]
+
+[[tool.importlinter.contracts]]
+name = "domain layers import no frameworks"
+type = "forbidden"
+source_modules = [
+  "app.modules.identity.domain", "app.modules.venue.domain", "app.modules.conversation.domain",
+  "app.modules.pipeline.domain", "app.modules.knowledge.domain", "app.modules.agent.domain",
+  "app.modules.privacy.domain",
+]
+forbidden_modules = ["fastapi", "sqlalchemy", "redis", "torch", "boto3"]
+allow_indirect_imports = true

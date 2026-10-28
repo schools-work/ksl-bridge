@@ -1,0 +1,7 @@
+id,domain,english,suggested_glosses,notes
+T001,transport,Which matatu goes to town?,MATATU TOWN GO WHICH,wh-question
+T002,transport,How much to Westlands?,FS:WESTLANDS HOW-MUCH,wh-question
+T003,transport,Stop here please.,STOP HERE PLEASE,
+T004,transport,Is this the bus to Kisumu?,THIS BUS FS:KISUMU,yes-no question
+T005,transport,I want a ticket for tomorrow.,TOMORROW IX-1 WANT TICKET,time first
+T006,transport,What time does it leave?,LEAVE TIME WHAT,wh-question

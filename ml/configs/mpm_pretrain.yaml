@@ -1,0 +1,9 @@
+experiment: mpm-pretrain-v1
+hypothesis: "Masked pose pre-training on unlabelled signing improves label-efficiency of ISLR/CSLR"
+seed: 42
+manifest: data/manifests/unlabelled_motion_v1.jsonl     # includes pretrain_only sources
+batch_size: 64
+max_len: 256
+epochs: 60
+lr: 0.0005
+model: {d: 256, layers: 8, heads: 4, mask_ratio: 0.4, span: 6}

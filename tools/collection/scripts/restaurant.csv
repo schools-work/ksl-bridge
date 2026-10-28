@@ -1,0 +1,16 @@
+id,domain,english,suggested_glosses,notes
+R001,restaurant,I want two chicken burgers.,IX-1 WANT BURGER CHICKEN NUM:2,
+R002,restaurant,Can I have water please?,IX-1 WANT WATER PLEASE,
+R003,restaurant,How much is this?,THIS PRICE HOW-MUCH,wh-question non-manual
+R004,restaurant,I don't eat meat.,IX-1 EAT MEAT NOT,negation non-manual
+R005,restaurant,I am allergic to peanuts.,IX-1 ALLERGY PEANUT,critical
+R006,restaurant,Where is the toilet?,TOILET WHERE,wh-question
+R007,restaurant,Can I pay with M-Pesa?,IX-1 PAY FS:MPESA CAN,yes-no question
+R008,restaurant,No sugar in my tea.,POSS-1 TEA SUGAR NOT,
+R009,restaurant,The food is cold.,FOOD COLD,
+R010,restaurant,Thank you very much.,THANK-YOU,
+R011,restaurant,I want chips and a soda.,IX-1 WANT CHIPS SODA,
+R012,restaurant,Bring the bill please.,BILL BRING PLEASE,
+R013,restaurant,Is the chicken spicy?,CHICKEN SPICY,yes-no question
+R014,restaurant,One more chapati.,CHAPATI ONE MORE,
+R015,restaurant,Can I sit outside?,IX-1 SIT OUTSIDE CAN,yes-no question

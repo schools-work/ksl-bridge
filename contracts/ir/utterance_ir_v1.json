@@ -1,0 +1,324 @@
+{
+  "$defs": {
+    "Clarification": {
+      "properties": {
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "prompt_glosses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prompt Glosses",
+          "type": "array"
+        },
+        "prompt_text": {
+          "title": "Prompt Text",
+          "type": "string"
+        },
+        "span_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span Index"
+        }
+      },
+      "required": [
+        "kind",
+        "prompt_text",
+        "prompt_glosses"
+      ],
+      "title": "Clarification",
+      "type": "object"
+    },
+    "Hypothesis": {
+      "description": "One candidate reading of the input (an entry of the N-best list).",
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "glosses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Glosses",
+          "type": "array"
+        },
+        "log_prob": {
+          "title": "Log Prob",
+          "type": "number"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        }
+      },
+      "required": [
+        "log_prob",
+        "confidence"
+      ],
+      "title": "Hypothesis",
+      "type": "object"
+    },
+    "Intent": {
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "slots": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "title": "Slots",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "confidence"
+      ],
+      "title": "Intent",
+      "type": "object"
+    },
+    "Modality": {
+      "enum": [
+        "sign",
+        "speech",
+        "text",
+        "device"
+      ],
+      "title": "Modality",
+      "type": "string"
+    },
+    "NonManual": {
+      "properties": {
+        "intensity": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Intensity",
+          "type": "number"
+        },
+        "negation": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Negation",
+          "type": "number"
+        },
+        "question": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Question",
+          "type": "number"
+        }
+      },
+      "title": "NonManual",
+      "type": "object"
+    },
+    "TokenSpan": {
+      "properties": {
+        "alternatives": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "end_ms": {
+          "title": "End Ms",
+          "type": "integer"
+        },
+        "start_ms": {
+          "title": "Start Ms",
+          "type": "integer"
+        },
+        "token": {
+          "title": "Token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "start_ms",
+        "end_ms",
+        "confidence"
+      ],
+      "title": "TokenSpan",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "best": {
+      "$ref": "#/$defs/Hypothesis"
+    },
+    "clarification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Clarification"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "intent": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Intent"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "is_final": {
+      "default": false,
+      "title": "Is Final",
+      "type": "boolean"
+    },
+    "language": {
+      "default": "ksl",
+      "title": "Language",
+      "type": "string"
+    },
+    "model_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Model Versions",
+      "type": "object"
+    },
+    "nbest": {
+      "items": {
+        "$ref": "#/$defs/Hypothesis"
+      },
+      "title": "Nbest",
+      "type": "array"
+    },
+    "needs_clarification": {
+      "default": false,
+      "title": "Needs Clarification",
+      "type": "boolean"
+    },
+    "non_manual": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NonManual"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "revision": {
+      "default": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "room_id": {
+      "format": "uuid",
+      "title": "Room Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/Modality"
+    },
+    "spans": {
+      "items": {
+        "$ref": "#/$defs/TokenSpan"
+      },
+      "title": "Spans",
+      "type": "array"
+    },
+    "speaker_id": {
+      "format": "uuid",
+      "title": "Speaker Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "room_id",
+    "speaker_id",
+    "source",
+    "created_at",
+    "best"
+  ],
+  "title": "UtteranceIR",
+  "type": "object"
+}

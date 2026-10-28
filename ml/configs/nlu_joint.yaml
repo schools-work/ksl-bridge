@@ -1,0 +1,3 @@
+seed: 42
+data_jsonl: data/nlu/service_dialogues_v1.jsonl     # {text, glosses, intent, slots, signer_id}
+out: artifacts/nlu/tfidf_logreg_v1.pkl
